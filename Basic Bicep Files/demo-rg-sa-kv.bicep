@@ -38,6 +38,7 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2023-07-01' = {
   tags: tags
 }
 
+
 // Create a Storage Account
 module storageAccount 'br/public:storage/storage-account:3.0.1' = {
   name: storageAccountName
@@ -66,3 +67,6 @@ module keyVault 'br/public:security/keyvault:1.0.2' = {
   scope: resourceGroup
 }
 
+output resourceGroupName string = resourceGroup.name
+output storageAccountName string = storageAccount.outputs.name
+output keyVaultName string = keyVault.outputs.name
