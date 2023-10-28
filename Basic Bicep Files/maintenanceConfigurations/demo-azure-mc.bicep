@@ -59,6 +59,9 @@ param environment string = 'p'
 @maxLength(10)
 param timezone string = 'US-Eastern'
 
+@description('Whether to create a lock on the maintenance configuration. It defaults to true')
+param resourceLock bool = true
+
 // PT+1 is the default day designation for the Wednesday after the second Tuesday of the month
 @description('The day designation of the maintenance window. It defaults to PT+1')
 param dayDesignation string = 'PT+1'
@@ -92,7 +95,7 @@ resource patchConfiguration 'Microsoft.Maintenance/maintenanceConfigurations@202
   }
 }
 
-resource lock 'Microsoft.Authorization/locks@2020-05-01' = {
+resource lock 'Microsoft.Authorization/locks@2020-05-01' = if (resourceLock){
   name: '${maintenanceConfigurationName}-lock'
   properties: {
     level: 'CanNotDelete'

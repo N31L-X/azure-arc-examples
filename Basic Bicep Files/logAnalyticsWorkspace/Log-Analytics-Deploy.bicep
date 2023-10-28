@@ -26,6 +26,9 @@ param tags object = {
   DeploymentType: 'Bicep'
 }
 
+@description('Whether to create a lock on the maintenance configuration. It defaults to true')
+param resourceLock bool = true
+
 @description('Sku for the Log Analytics Workspace.')
 param sku string = 'PerGB2018'
 
@@ -44,7 +47,7 @@ resource logWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' ={
     }
 }
 
-resource lock 'Microsoft.Authorization/locks@2020-05-01' = {
+resource lock 'Microsoft.Authorization/locks@2020-05-01' = if(resourceLock) {
     name: '${logAnalyticsWorkspaceName}-lock'
     properties: {
       level: 'CanNotDelete'

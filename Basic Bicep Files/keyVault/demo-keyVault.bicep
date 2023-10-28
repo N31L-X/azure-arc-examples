@@ -21,6 +21,9 @@ param skuName string = 'standard'
 @description('The SKU family of the Key Vault.')
 param skuFamily string = 'A'
 
+@description('Whether to create a lock on the maintenance configuration. It defaults to true')
+param resourceLock bool = true
+
 //@description('The Tenant ID of the Key Vault to be created.')
 //param tenantId string = subscription().tenantId
 
@@ -61,7 +64,7 @@ resource vault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 }
 
 // Add a resource lock to the key vault to prevent accidental deletion
-resource lock 'Microsoft.Authorization/locks@2020-05-01' = {
+resource lock 'Microsoft.Authorization/locks@2020-05-01' = if (resourceLock){
   name: '${vaultName}-lock'
   properties: {
     level: 'CanNotDelete'
